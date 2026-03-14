@@ -145,51 +145,118 @@ def build_pdf(md_path: Path, pdf_path: Path) -> None:
     html_path = pdf_path.with_suffix(".html")
     css_path  = pdf_path.with_suffix(".css")
 
-    # Simple premium-look CSS
+    # Premium print-first CSS with modern typography and stable pagination
     css_content = """
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono&display=swap');
-    body {
-        font-family: 'Inter', -apple-system, sans-serif;
-        line-height: 1.7;
-        color: #1a1a1a;
-        max-width: 850px;
-        margin: auto;
-        padding: 40px;
+    @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Fraunces:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+    :root {
+        --ink: #121318;
+        --muted: #5d6670;
+        --rule: #e3e6eb;
+        --accent: #2563eb;
+        --paper: #ffffff;
     }
-    h1, h2, h3, h4 { color: #111; margin-top: 1.5em; font-weight: 700; }
-    h1 { font-size: 2.5em; border-bottom: 2px solid #eee; padding-bottom: 0.3em; }
-    h2 { font-size: 1.8em; border-bottom: 1px solid #eee; padding-bottom: 0.2em; }
+    * { box-sizing: border-box; }
+    html { -webkit-font-smoothing: antialiased; }
+    body {
+        font-family: 'Source Serif 4', ui-serif, Georgia, serif;
+        color: var(--ink);
+        background: var(--paper);
+        line-height: 1.55;
+        font-size: 11.25pt;
+        margin: 0;
+        padding: 0;
+        hyphens: auto;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+        font-variant-ligatures: common-ligatures;
+    }
+    h1, h2, h3, h4, h5 {
+        font-family: 'Fraunces', ui-serif, Georgia, serif;
+        color: var(--ink);
+        margin: 1.6em 0 0.5em;
+        font-weight: 700;
+        line-height: 1.2;
+        page-break-after: avoid;
+        break-after: avoid-page;
+    }
+    h1 { font-size: 26pt; letter-spacing: -0.01em; }
+    h2 { font-size: 18pt; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
+    h3 { font-size: 14.5pt; color: #1b2530; }
+    h4 { font-size: 12.5pt; color: #1b2530; }
+    p { margin: 0 0 0.9em; orphans: 2; widows: 2; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ul, ol { margin: 0 0 1em 1.25em; }
+    li { margin: 0.25em 0; }
+    hr { border: 0; border-top: 1px solid var(--rule); margin: 2em 0; }
+    blockquote {
+        margin: 1.2em 0;
+        padding: 0.65em 1em;
+        border-left: 3px solid var(--accent);
+        background: #f6f8ff;
+        color: #2b3340;
+        font-style: italic;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    pre, code {
+        font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
     pre {
-        background: #f6f8fa;
-        border-radius: 8px;
-        padding: 16px;
+        background: #f5f7fb;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 14px 16px;
         overflow-x: auto;
-        border: 1px solid #e1e4e8;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.9em;
+        font-size: 9.5pt;
+        line-height: 1.45;
+        break-inside: avoid;
+        page-break-inside: avoid;
     }
     code {
-        font-family: 'JetBrains Mono', monospace;
-        background: rgba(175, 184, 193, 0.2);
-        padding: 0.2em 0.4em;
-        border-radius: 6px;
-        font-size: 85%;
+        background: #eef2ff;
+        padding: 0.12em 0.3em;
+        border-radius: 5px;
+        font-size: 0.92em;
+        color: #1f2937;
     }
-    blockquote {
-        border-left: 4px solid #007bff;
-        margin: 1.5em 0;
-        padding: 0.5em 20px;
-        background: #f8f9ff;
-        color: #444;
-        font-style: italic;
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.4em 0;
+        font-size: 10.5pt;
+        break-inside: avoid;
+        page-break-inside: avoid;
     }
+    th, td {
+        border: 1px solid #e2e8f0;
+        padding: 8px 10px;
+        text-align: left;
+        vertical-align: top;
+    }
+    th { background: #f1f5f9; font-weight: 600; }
     img { max-width: 100%; height: auto; border-radius: 8px; }
-    table { width: 100%; border-collapse: collapse; margin: 2em 0; }
-    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-    th { background: #f2f2f2; }
+    .page-break { break-before: page; page-break-before: always; }
+
+    @page {
+        size: 6in 9in;
+        margin: 0.85in 0.8in 0.9in;
+    }
+    @media screen {
+        body {
+            background: #f3f4f6;
+            max-width: 860px;
+            padding: 56px;
+            margin: 24px auto;
+            box-shadow: 0 10px 30px rgba(16, 24, 40, 0.08);
+            border-radius: 14px;
+        }
+    }
     @media print {
-        body { padding: 0; }
-        .page-break { page-break-before: always; }
+        body { margin: 0; }
+        a { color: #1a1a1a; text-decoration: none; }
+        .no-print { display: none; }
+        h2 { border-bottom-color: #d8dde5; }
     }
     """
 
