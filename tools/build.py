@@ -161,8 +161,8 @@ def build_pdf(md_path: Path, pdf_path: Path) -> None:
         font-family: 'Source Serif 4', ui-serif, Georgia, serif;
         color: var(--ink);
         background: var(--paper);
-        line-height: 1.55;
-        font-size: 11.25pt;
+        line-height: 1.35;
+        font-size: 10pt;
         margin: 0;
         padding: 0;
         hyphens: auto;
@@ -179,11 +179,11 @@ def build_pdf(md_path: Path, pdf_path: Path) -> None:
         page-break-after: avoid;
         break-after: avoid-page;
     }
-    h1 { font-size: 26pt; letter-spacing: -0.01em; }
-    h2 { font-size: 18pt; border-bottom: 1px solid var(--rule); padding-bottom: 0.2em; }
-    h3 { font-size: 14.5pt; color: #1b2530; }
-    h4 { font-size: 12.5pt; color: #1b2530; }
-    p { margin: 0 0 0.9em; orphans: 2; widows: 2; }
+    h1 { font-size: 22pt; letter-spacing: -0.01em; }
+    h2 { font-size: 15.5pt; border-bottom: 1px solid var(--rule); padding-bottom: 0.15em; }
+    h3 { font-size: 12.5pt; color: #1b2530; }
+    h4 { font-size: 11.5pt; color: #1b2530; }
+    p { margin: 0 0 0.6em; orphans: 2; widows: 2; }
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
     ul, ol { margin: 0 0 1em 1.25em; }
@@ -206,10 +206,10 @@ def build_pdf(md_path: Path, pdf_path: Path) -> None:
         background: #f5f7fb;
         border: 1px solid #e2e8f0;
         border-radius: 10px;
-        padding: 14px 16px;
+        padding: 10px 12px;
         overflow-x: auto;
-        font-size: 9.5pt;
-        line-height: 1.45;
+        font-size: 8.5pt;
+        line-height: 1.35;
         break-inside: avoid;
         page-break-inside: avoid;
     }
@@ -223,8 +223,8 @@ def build_pdf(md_path: Path, pdf_path: Path) -> None:
     table {
         width: 100%;
         border-collapse: collapse;
-        margin: 1.4em 0;
-        font-size: 10.5pt;
+        margin: 1em 0;
+        font-size: 9.5pt;
         break-inside: avoid;
         page-break-inside: avoid;
     }
@@ -239,17 +239,17 @@ def build_pdf(md_path: Path, pdf_path: Path) -> None:
     .page-break { break-before: page; page-break-before: always; }
 
     @page {
-        size: 6in 9in;
-        margin: 0.85in 0.8in 0.9in;
+        size: 8.5in 11in;
+        margin: 0.6in 0.6in 0.7in;
     }
     @media screen {
         body {
             background: #f3f4f6;
-            max-width: 860px;
-            padding: 56px;
-            margin: 24px auto;
+            max-width: 980px;
+            padding: 40px;
+            margin: 16px auto;
             box-shadow: 0 10px 30px rgba(16, 24, 40, 0.08);
-            border-radius: 14px;
+            border-radius: 12px;
         }
     }
     @media print {
