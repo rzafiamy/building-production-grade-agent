@@ -46,7 +46,7 @@ Set `"moduleResolution": "bundler"` or `"node16"` in your `tsconfig.json`. The d
 Lemura needs credentials for whichever provider you use. `OpenAICompatibleAdapter` reads from these environment variables by default:
 
 - `LEMURA_API_KEY` — API key for the provider
-- `LEMURA_BASE_URL` — Base URL (e.g. `https://api.openai.com/v1`)
+- `LEMURA_BASE_URL` — Base URL (for example, the OpenAI API base path)
 - `LEMURA_MODEL` — Default model name
 
 You can also pass these values directly to the adapter constructor. Environment variables are the recommended pattern for production to avoid hardcoding credentials.
@@ -115,7 +115,7 @@ console.log(result);
 
 ```bash
 # Set environment variables then run
-LEMURA_API_KEY=sk-... LEMURA_BASE_URL=https://api.openai.com/v1 npx tsx src/index.ts
+LEMURA_API_KEY=sk-... LEMURA_BASE_URL=OPENAI_API_BASE npx tsx src/index.ts
 ```
 
 For a session with no tools, the model answers directly and the loop terminates after one turn. The real value of the session appears when you add tools and the model starts making tool calls.
