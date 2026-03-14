@@ -16,12 +16,16 @@ from __future__ import annotations
 import argparse
 import sys
 import subprocess
+import os
 from pathlib import Path
 
 TOOLS_DIR   = Path(__file__).parent.resolve()
 ROOT        = TOOLS_DIR.parent
 CONTENT_DIR = ROOT / "content"
 BUILD_DIR   = ROOT / "build"
+
+BOOK_TITLE  = "Building Production-Grade Agents"
+BOOK_AUTHOR = os.environ.get("BOOK_AUTHOR", "Rija ZAFIAMY")
 
 sys.path.insert(0, str(TOOLS_DIR))
 
@@ -272,7 +276,7 @@ def build_pdf(md_path: Path, pdf_path: Path) -> None:
             "--toc",
             "--toc-depth=2",
             "--css", str(css_path),
-            "--metadata", "title=Building Production-Grade Agents",
+            "--metadata", f"title={BOOK_TITLE}",
             "--highlight-style=tango",
         ]
         subprocess.run(cmd_html, check=True, capture_output=True)
@@ -280,13 +284,38 @@ def build_pdf(md_path: Path, pdf_path: Path) -> None:
         # 2. HTML -> PDF
         # We use google-chrome if available
         chrome_bin = "google-chrome" # or "chromium-browser"
+        def _minify_template(html: str) -> str:
+            return " ".join(html.split())
+
+        header_template = _minify_template(
+            f"""
+            <div style="font-size:8px; color:#6b7280; width:100%; padding:0 0.6in;">
+              <span>{BOOK_TITLE} — {BOOK_AUTHOR}</span>
+            </div>
+            """
+        )
+        footer_template = _minify_template(
+            """
+            <div style="font-size:8px; color:#6b7280; width:100%; padding:0 0.6in;">
+              <span style="float:right;">
+                <span class="pageNumber"></span> / <span class="totalPages"></span>
+              </span>
+            </div>
+            """
+        )
         cmd_pdf = [
             chrome_bin,
             "--headless",
             "--disable-gpu",
             "--no-sandbox",
+            "--display-header-footer",
+            f"--header-template={header_template}",
+            f"--footer-template={footer_template}",
+            "--margin-top=0.55in",
+            "--margin-bottom=0.55in",
+            "--margin-left=0.6in",
+            "--margin-right=0.6in",
             f"--print-to-pdf={pdf_path}",
-            "--no-pdf-header-footer",
             str(html_path)
         ]
         subprocess.run(cmd_pdf, check=True, capture_output=True)
