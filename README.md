@@ -139,11 +139,14 @@ Errors block publishing. Warnings are advisory.
 
 ### Book Builder
 
-Assembles all content files in order and reports word counts.
+Assembles all content files in order, reports word counts, and handles exports (Markdown and PDF).
 
 ```bash
 # Full stats + build concatenated book to build/book.md
 python tools/build.py
+
+# build/book.md + generate build/book.pdf (requires Google Chrome/Chromium)
+python tools/build.py --pdf
 
 # Word-count report only (no output file written)
 python tools/build.py --stats
@@ -151,8 +154,8 @@ python tools/build.py --stats
 # Verify file numbering has no gaps or duplicates
 python tools/build.py --check-order
 
-# Write to a custom path
-python tools/build.py --out /tmp/book-draft.md
+# Write outputs to custom paths
+python tools/build.py --out draft.md --pdf --pdf-out draft.pdf
 ```
 
 ### Frozen Structure

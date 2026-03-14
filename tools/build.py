@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+import subprocess
 from pathlib import Path
 
 TOOLS_DIR   = Path(__file__).parent.resolve()
@@ -137,6 +138,106 @@ def build_book(files: list[Path], out_path: Path) -> None:
     print(f"\n  {c('Built →', _GREEN)} {out_path}  ({size_kb:.1f} KB, {len(files)} files)")
 
 
+def build_pdf(md_path: Path, pdf_path: Path) -> None:
+    """Convert the combined Markdown file to PDF using Chrome headless."""
+    print(f"  {c('Generating PDF via Chrome...', _CYAN)}")
+
+    html_path = pdf_path.with_suffix(".html")
+    css_path  = pdf_path.with_suffix(".css")
+
+    # Simple premium-look CSS
+    css_content = """
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono&display=swap');
+    body {
+        font-family: 'Inter', -apple-system, sans-serif;
+        line-height: 1.7;
+        color: #1a1a1a;
+        max-width: 850px;
+        margin: auto;
+        padding: 40px;
+    }
+    h1, h2, h3, h4 { color: #111; margin-top: 1.5em; font-weight: 700; }
+    h1 { font-size: 2.5em; border-bottom: 2px solid #eee; padding-bottom: 0.3em; }
+    h2 { font-size: 1.8em; border-bottom: 1px solid #eee; padding-bottom: 0.2em; }
+    pre {
+        background: #f6f8fa;
+        border-radius: 8px;
+        padding: 16px;
+        overflow-x: auto;
+        border: 1px solid #e1e4e8;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9em;
+    }
+    code {
+        font-family: 'JetBrains Mono', monospace;
+        background: rgba(175, 184, 193, 0.2);
+        padding: 0.2em 0.4em;
+        border-radius: 6px;
+        font-size: 85%;
+    }
+    blockquote {
+        border-left: 4px solid #007bff;
+        margin: 1.5em 0;
+        padding: 0.5em 20px;
+        background: #f8f9ff;
+        color: #444;
+        font-style: italic;
+    }
+    img { max-width: 100%; height: auto; border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; margin: 2em 0; }
+    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+    th { background: #f2f2f2; }
+    @media print {
+        body { padding: 0; }
+        .page-break { page-break-before: always; }
+    }
+    """
+
+    try:
+        css_path.write_text(css_content, encoding="utf-8")
+
+        # 1. MD -> HTML
+        cmd_html = [
+            "pandoc",
+            str(md_path),
+            "-o", str(html_path),
+            "--standalone",
+            "--toc",
+            "--toc-depth=2",
+            "--css", str(css_path),
+            "--metadata", "title=Building Production-Grade Agents",
+            "--highlight-style=tango",
+        ]
+        subprocess.run(cmd_html, check=True, capture_output=True)
+
+        # 2. HTML -> PDF
+        # We use google-chrome if available
+        chrome_bin = "google-chrome" # or "chromium-browser"
+        cmd_pdf = [
+            chrome_bin,
+            "--headless",
+            "--disable-gpu",
+            "--no-sandbox",
+            f"--print-to-pdf={pdf_path}",
+            "--no-pdf-header-footer",
+            str(html_path)
+        ]
+        subprocess.run(cmd_pdf, check=True, capture_output=True)
+
+        # Cleanup
+        if html_path.exists(): html_path.unlink()
+        if css_path.exists():  css_path.unlink()
+
+        if pdf_path.exists():
+            size_mb = pdf_path.stat().st_size / (1024 * 1024)
+            print(f"  {c('Built →', _GREEN)} {pdf_path}  ({size_mb:.2f} MB)")
+
+    except subprocess.CalledProcessError as e:
+        print(f"  {c('Error during PDF generation:', _YELLOW)}\n{e.stderr.decode() if e.stderr else e}")
+    except Exception as e:
+        print(f"  {c('An unexpected error occurred:', _YELLOW)} {e}")
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main() -> int:
@@ -145,7 +246,9 @@ def main() -> int:
     )
     parser.add_argument("--stats",       action="store_true", help="Print stats only, skip build.")
     parser.add_argument("--check-order", action="store_true", help="Verify file numbering and exit.")
-    parser.add_argument("--out",         metavar="PATH", help="Output path (default: build/book.md).")
+    parser.add_argument("--out",         metavar="PATH", help="Output path for Markdown (default: build/book.md).")
+    parser.add_argument("--pdf",         action="store_true", help="Generate PDF version as well.")
+    parser.add_argument("--pdf-out",     metavar="PATH", help="Output path for PDF (default: build/book.pdf).")
     args = parser.parse_args()
 
     files = collect_files()
@@ -166,9 +269,15 @@ def main() -> int:
     if args.stats:
         return 0
 
-    # Build
+    # Build Markdown
     out = Path(args.out) if args.out else BUILD_DIR / "book.md"
     build_book(files, out)
+
+    # Build PDF if requested
+    if args.pdf:
+        pdf_out = Path(args.pdf_out) if args.pdf_out else BUILD_DIR / "book.pdf"
+        build_pdf(out, pdf_out)
+
     return 0
 
 
