@@ -24,55 +24,61 @@ VOICE & TONE
 
 STRUCTURE RULES
 ───────────────
-6.  Every chapter opens with a "Chapter Goal" box — 2–4 sentences explaining
+6.  TABLE OF CONTENTS IS FROZEN. The TOC in `content/07-toc.md` defines the
+    canonical structure of the book. Writers and maintainers must NEVER add,
+    remove, or reorder entries in the TOC. The same applies to the section
+    headings inside each page — the H1, H2, and H3 structure is fixed and must
+    not be changed. Write content within the existing sections only.
+
+7.  Every chapter opens with a "Chapter Goal" box — 2–4 sentences explaining
     what the reader will know/be able to do by the end. No vague promises.
 
-7.  Every chapter ends with a "Key Takeaways" bullet list — 3–7 items,
+8.  Every chapter ends with a "Key Takeaways" bullet list — 3–7 items,
     one sentence each. These should be the flashcard version of the chapter.
 
-8.  Every chapter that introduces a concept must show a concrete code example
+9.  Every chapter that introduces a concept must show a concrete code example
     before the chapter ends. No concept-only chapters.
 
-9.  Use callout boxes for:
+10. Use callout boxes for:
     > [!NOTE]     — supplementary information
     > [!WARNING]  — things that will burn you in production
     > [!TIP]      — shortcuts or non-obvious tricks
     > [!DANGER]   — security/data-loss risks
     Use sparingly — maximum 3 callouts per chapter.
 
-10. Section depth: H2 for major sections, H3 for sub-sections, H4 only when
+11. Section depth: H2 for major sections, H3 for sub-sections, H4 only when
     truly necessary. Never use H5 or H6.
 
-11. Lists: use when there are 3+ parallel items. Prefer prose for 2 items.
+12. Lists: use when there are 3+ parallel items. Prefer prose for 2 items.
     Bullet lists for unordered concepts. Numbered lists for sequences/steps.
 
 CODE EXAMPLES
 ─────────────
-12. All code examples use TypeScript unless explicitly showing a different
+13. All code examples use TypeScript unless explicitly showing a different
     language. Indicate language in fenced code blocks always.
 
-13. Code examples must be complete enough to run or clearly marked with
+14. Code examples must be complete enough to run or clearly marked with
     `// ... (abbreviated)` if shortened for space. Never show code that
     would fail if copy-pasted without obvious reason.
 
-14. Every code example must have a one-line comment at the top indicating
+15. Every code example must have a one-line comment at the top indicating
     what it demonstrates. Example:
     ```typescript
     // Configuring a session with sandwich compression
     ```
 
-15. Prefer showing real Lemura API usage. Only use pseudocode when the
+16. Prefer showing real Lemura API usage. Only use pseudocode when the
     concept is framework-agnostic AND clearly labeled as pseudocode.
 
-16. Include expected output or behavior after code examples where useful.
+17. Include expected output or behavior after code examples where useful.
     Use `// Output:` comments for inline results.
 
-17. If a code pattern is wrong/dangerous, show it first, label it as
+18. If a code pattern is wrong/dangerous, show it first, label it as
     "Anti-pattern:" and then show the correct version labeled "Better:".
 
 NAMING & TERMINOLOGY
 ─────────────────────
-18. Consistent terminology throughout:
+19. Consistent terminology throughout:
     - "agent" (not "bot", "assistant", "AI system" unless in quotes)
     - "turn" (one full request+response cycle)
     - "tool call" (not "function call" unless in OpenAI-specific context)
@@ -83,55 +89,55 @@ NAMING & TERMINOLOGY
     - "compression" (reducing context size)
     - "provider" (the LLM backend: OpenAI, Anthropic, etc.)
 
-19. Acronyms: define on first use, then use freely.
+20. Acronyms: define on first use, then use freely.
     Example: "ReAct (Reasoning + Acting) loop"
 
-20. Class and API names are always formatted in code: `SessionManager`,
+21. Class and API names are always formatted in code: `SessionManager`,
     `ContextManager`, `GoalInjector`. Never in plain text.
 
 PACING & LENGTH
 ───────────────
-21. Chapters: 2,000–5,000 words. Front-matter pages: 200–800 words.
+22. Chapters: 2,000–5,000 words. Front-matter pages: 200–800 words.
     Appendices: as long as needed for completeness.
 
-22. One idea per paragraph. Paragraphs: 3–6 sentences. No walls of text.
+23. One idea per paragraph. Paragraphs: 3–6 sentences. No walls of text.
 
-23. When a concept is complex, use this three-step structure:
+24. When a concept is complex, use this three-step structure:
     a) What it is (definition, one paragraph)
     b) Why it matters (motivation, one paragraph)
     c) How to use it (code + explanation)
 
-24. Never repeat the same concept twice in a chapter. If you need to refer
+25. Never repeat the same concept twice in a chapter. If you need to refer
     back, use "As discussed in Chapter N" — don't re-explain.
 
-25. Cut ruthlessly. If a sentence doesn't add information or move the story
+26. Cut ruthlessly. If a sentence doesn't add information or move the story
     forward, delete it. Every word must earn its place.
 
 HONESTY & ACCURACY
 ──────────────────
-26. When something is hard, say it's hard. Don't soften engineering reality.
+27. When something is hard, say it's hard. Don't soften engineering reality.
 
-27. When Lemura doesn't support something (yet), say so explicitly and
+28. When Lemura doesn't support something (yet), say so explicitly and
     suggest the workaround or the roadmap item if known.
 
-28. Do not claim Lemura is the only way. Show why it's a good way, with
+29. Do not claim Lemura is the only way. Show why it's a good way, with
     comparisons where helpful.
 
-29. When covering a pattern that has known failure modes, describe the
+30. When covering a pattern that has known failure modes, describe the
     failure mode. Readers who know the failure mode can prevent it.
 
-30. Date-sensitive content (model capabilities, pricing, API availability)
+31. Date-sensitive content (model capabilities, pricing, API availability)
     must be marked with a comment: `<!-- Accurate as of 2026-03 — verify -->`
 
 CROSS-REFERENCES
 ────────────────
-31. When referencing another chapter: "See **Chapter 8 — Goal Injection**"
+32. When referencing another chapter: "See **Chapter 8 — Goal Injection**"
     using the exact chapter title.
 
-32. When referencing Lemura source code: include the file path.
+33. When referencing Lemura source code: include the file path.
     Example: "see `src/agent/execution/GoalInjector.ts`"
 
-33. When referencing external resources: name them explicitly but do not
+34. When referencing external resources: name them explicitly but do not
     include URLs (they rot). Say: "the OpenAI Function Calling docs" or
     "the MCP specification".
 

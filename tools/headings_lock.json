@@ -1,0 +1,695 @@
+{
+  "_meta": {
+    "generated": "2026-03-14",
+    "note": "DO NOT edit manually. Update only with: python tools/check.py --update-lock"
+  },
+  "toc_hash": "fa71aed758186077f0b238c1e8d2daef9a6d03a5c7bb575d0b8cd42e9a2bac0f",
+  "files": {
+    "00-cover.md": {
+      "headings": [
+        "# The Autonomous Agent",
+        "## Engineering Reliable AI Systems with Lemura"
+      ]
+    },
+    "01-title-page.md": {
+      "headings": [
+        "# The Autonomous Agent",
+        "## Engineering Reliable AI Systems with Lemura"
+      ]
+    },
+    "02-copyright.md": {
+      "headings": [
+        "## Copyright & License"
+      ]
+    },
+    "03-dedication.md": {
+      "headings": [
+        "## Dedication"
+      ]
+    },
+    "04-foreword.md": {
+      "headings": [
+        "## Foreword"
+      ]
+    },
+    "05-preface.md": {
+      "headings": [
+        "## Preface",
+        "### Why This Book Exists",
+        "### Who This Book Is For",
+        "### Who This Book Is Not For",
+        "### How to Read This Book",
+        "### A Note on Lemura",
+        "### A Note on the Pace of Change",
+        "### Acknowledgements"
+      ]
+    },
+    "06-introduction.md": {
+      "headings": [
+        "## Introduction: The Agent Promise and the Agent Problem",
+        "### The Promise That Got Everyone Excited",
+        "### The Gap Between the Demo and the Product",
+        "### What This Book Covers",
+        "### A Map of the Journey",
+        "### The Lemura Philosophy: Composable, Observable, Honest",
+        "### Let's Build Something Real"
+      ]
+    },
+    "08-ch01-the-agent-moment.md": {
+      "headings": [
+        "## Chapter 1 — The Agent Moment: Why 2026 Is Different",
+        "### 1.1 The Long Wait for Autonomous Software",
+        "### 1.2 What Actually Changed: Models Cross a Threshold",
+        "### 1.3 From Chatbots to Agents: A Qualitative Shift",
+        "### 1.4 The Economic Unlock: When Agents Are Cheaper Than Humans",
+        "### 1.5 Why Now Is Still Hard: The Gap Between Capability and Reliability",
+        "### 1.6 The Engineer's Responsibility in the Agent Era",
+        "## Key Takeaways"
+      ]
+    },
+    "09-ch02-what-makes-an-agent.md": {
+      "headings": [
+        "## Chapter 2 — What Makes an Agent: Beyond the Chatbot",
+        "### 2.1 Defining an Agent: A Precise Definition for Engineers",
+        "### 2.2 The Spectrum: Pipeline → Chatbot → Agent",
+        "### 2.3 The Five Core Agent Capabilities",
+        "### 2.4 Agent Taxonomies: Single-Turn, Multi-Turn, Multi-Agent",
+        "### 2.5 What Agents Are Not (Common Misconceptions)",
+        "### 2.6 When to Use an Agent (and When Not To)",
+        "## Key Takeaways"
+      ]
+    },
+    "10-ch03-problems-we-must-solve.md": {
+      "headings": [
+        "## Chapter 3 — The Problems We Must Solve",
+        "### 3.1 The Seven Cardinal Failures of Production Agents",
+        "### 3.2 Failure #1: Context Window Exhaustion",
+        "### 3.3 Failure #2: Goal Drift",
+        "### 3.4 Failure #3: Infinite Loops and Stuck States",
+        "### 3.5 Failure #4: Hallucinated Tool Calls",
+        "### 3.6 Failure #5: Cost Spirals",
+        "### 3.7 Failure #6: Silent Errors and Invisible State",
+        "### 3.8 Failure #7: Security and Prompt Injection",
+        "### 3.9 A Framework for Prevention: Defensive Agent Architecture",
+        "## Key Takeaways"
+      ]
+    },
+    "11-ch04-2026-landscape.md": {
+      "headings": [
+        "## Chapter 4 — The 2026 Landscape: Models, APIs, and Ecosystems",
+        "### 4.1 The Model Landscape in 2026",
+        "### 4.2 Evaluating Models for Agentic Tasks",
+        "### 4.3 The OpenAI-Compatible API Standard",
+        "### 4.4 The Model Context Protocol (MCP)",
+        "### 4.5 Provider-Agnosticism as a Business Requirement",
+        "### 4.6 Choosing Your Stack: A Decision Framework",
+        "## Key Takeaways"
+      ]
+    },
+    "12-part-2-intro.md": {
+      "headings": [
+        "# Part II — Architecture Fundamentals",
+        "## Building on Solid Ground",
+        "### What This Part Covers",
+        "### Why Architecture Comes Before Framework",
+        "### The Mental Model That Ties It All Together"
+      ]
+    },
+    "13-ch05-react-loop.md": {
+      "headings": [
+        "## Chapter 5 — The ReAct Loop: Reasoning and Acting",
+        "### 5.1 The Origins of ReAct",
+        "### 5.2 The Loop in Detail",
+        "### 5.3 The Loop as a State Machine",
+        "### 5.4 Termination Conditions",
+        "### 5.5 The ReAct Loop in Lemura: SessionManager",
+        "### 5.6 What ReAct Gets Wrong (and How to Work Around It)",
+        "### 5.7 Beyond Vanilla ReAct: Extensions and Variants",
+        "## Key Takeaways"
+      ]
+    },
+    "14-ch06-tools.md": {
+      "headings": [
+        "## Chapter 6 — Tools: The Agent's Hands",
+        "### 6.1 What Is a Tool?",
+        "### 6.2 Designing Tools That Agents Use Correctly",
+        "### 6.3 Tool Categories",
+        "### 6.4 Tool Output Design",
+        "### 6.5 Tool Implementation Patterns",
+        "### 6.6 Anti-Patterns in Tool Design",
+        "### 6.7 Registering Tools in Lemura",
+        "## Key Takeaways"
+      ]
+    },
+    "15-ch07-context.md": {
+      "headings": [
+        "## Chapter 7 — Context: The Agent's Working Memory",
+        "### 7.1 What Is Context?",
+        "### 7.2 The Context Window: Physical Limits and Real Behavior",
+        "### 7.3 Anatomy of a Well-Structured Context",
+        "### 7.4 Context Growth Over Time",
+        "### 7.5 Context Management Strategies (Preview)",
+        "### 7.6 Context in Lemura: The ContextManager",
+        "## Key Takeaways"
+      ]
+    },
+    "16-ch08-planning-and-goals.md": {
+      "headings": [
+        "## Chapter 8 — Planning and Goals: Directing the Agent",
+        "### 8.1 The Goal: What the Agent Is Trying to Accomplish",
+        "### 8.2 Goal Drift: The Silent Killer of Long Agents",
+        "### 8.3 Plans: Structured Sequences of Intent",
+        "### 8.4 Plan Design Patterns",
+        "### 8.5 Dynamic Planning: When the Plan Changes Mid-Execution",
+        "### 8.6 Planning in Lemura",
+        "## Key Takeaways"
+      ]
+    },
+    "17-ch09-compression.md": {
+      "headings": [
+        "## Chapter 9 — Compression: The Hidden Challenge",
+        "### 9.1 Why Compression Is Inevitable",
+        "### 9.2 The Compression Spectrum",
+        "### 9.3 What to Compress and What to Preserve",
+        "### 9.4 Compression Quality: What Gets Lost",
+        "### 9.5 The Cost of Compression",
+        "### 9.6 Compression Strategies in Lemura",
+        "## Key Takeaways"
+      ]
+    },
+    "18-ch10-provider-adapters.md": {
+      "headings": [
+        "## Chapter 10 — Provider Adapters: Staying Model-Agnostic",
+        "### 10.1 The Lock-In Risk Is Real",
+        "### 10.2 The Adapter Pattern for LLM Providers",
+        "### 10.3 The `IProviderAdapter` Interface in Lemura",
+        "### 10.4 `OpenAICompatibleAdapter`: The Default Adapter",
+        "### 10.5 Connecting to Anthropic",
+        "### 10.6 Writing a Custom Adapter",
+        "### 10.7 Multi-Provider Sessions",
+        "## Key Takeaways"
+      ]
+    },
+    "19-part-3-intro.md": {
+      "headings": [
+        "# Part III — Lemura Framework Deep Dive",
+        "## From Concepts to Code",
+        "### What This Part Covers",
+        "### Conventions Used in This Part",
+        "### The Architecture in One Diagram"
+      ]
+    },
+    "20-ch11-why-lemura.md": {
+      "headings": [
+        "## Chapter 11 — Why Lemura: Design Philosophy",
+        "### 11.1 The Problem with Existing Solutions",
+        "### 11.2 Lemura's Design Principles",
+        "### 11.3 The Four-Layer Architecture",
+        "### 11.4 What Lemura Is Not",
+        "### 11.5 Lemura in the Ecosystem",
+        "## Key Takeaways"
+      ]
+    },
+    "21-ch12-setup.md": {
+      "headings": [
+        "## Chapter 12 — Installing and Configuring Lemura",
+        "### 12.1 Prerequisites",
+        "### 12.2 Installation",
+        "### 12.3 Project Structure Recommendations",
+        "### 12.4 Your First Agent Session",
+        "### 12.5 The `SessionConfig` Interface",
+        "### 12.6 Environment Variables vs. Config Objects",
+        "### 12.7 TypeScript Strict Mode and Type Safety",
+        "### 12.8 Common Setup Errors and How to Fix Them",
+        "## Key Takeaways"
+      ]
+    },
+    "22-ch13-session-manager.md": {
+      "headings": [
+        "## Chapter 13 — SessionManager: The Agent Runtime",
+        "### 13.1 The SessionManager's Role",
+        "### 13.2 Creating a Session",
+        "### 13.3 Running the Agent",
+        "### 13.4 Setting Goals and Plans",
+        "### 13.5 Session Lifecycle Events",
+        "### 13.6 What Happens Inside a Turn",
+        "### 13.7 Controlling Execution",
+        "### 13.8 Session State and Introspection",
+        "## Key Takeaways"
+      ]
+    },
+    "23-ch14-context-strategies.md": {
+      "headings": [
+        "## Chapter 14 — ContextManager and Context Strategies",
+        "### 14.1 The ContextManager's Job",
+        "### 14.2 The `IContextStrategy` Interface",
+        "### 14.3 Strategy Composition",
+        "### 14.4 `SandwichCompressionStrategy` In Depth",
+        "### 14.5 `HistoryCompressionStrategy` In Depth",
+        "### 14.6 `SummaryInjectionStrategy` In Depth",
+        "### 14.7 Building a Custom Strategy",
+        "### 14.8 Strategy Selection Guide",
+        "## Key Takeaways"
+      ]
+    },
+    "24-ch15-goal-injection.md": {
+      "headings": [
+        "## Chapter 15 — Goal Injection: Keeping the Agent on Track",
+        "### 15.1 Why Goals Drift",
+        "### 15.2 The GoalInjector",
+        "### 15.3 Injection Position",
+        "### 15.4 Injection Frequency",
+        "### 15.5 Sub-Goal Tracking",
+        "### 15.6 Advanced Goal Patterns",
+        "## Key Takeaways"
+      ]
+    },
+    "25-ch16-continuation-planner.md": {
+      "headings": [
+        "## Chapter 16 — ContinuationPlanner: Multi-Step Execution",
+        "### 16.1 The Problem: Plans Without State",
+        "### 16.2 What ContinuationPlanner Does",
+        "### 16.3 The `PlanStep` Interface",
+        "### 16.4 Step Status Lifecycle",
+        "### 16.5 Data Flow Between Steps",
+        "### 16.6 Parallel Execution",
+        "### 16.7 Plan Examples",
+        "### 16.8 Integrating ContinuationPlanner with SessionManager",
+        "## Key Takeaways"
+      ]
+    },
+    "26-ch17-tool-response-processor.md": {
+      "headings": [
+        "## Chapter 17 — ToolResponseProcessor: Compressing Tool Output",
+        "### 17.1 The Tool Result Explosion Problem",
+        "### 17.2 What ToolResponseProcessor Does",
+        "### 17.3 Configuration",
+        "### 17.4 Compression Strategies for Tool Output",
+        "### 17.5 Preserving Key Information",
+        "### 17.6 Custom Response Processors",
+        "### 17.7 Debugging Tool Response Compression",
+        "## Key Takeaways"
+      ]
+    },
+    "27-ch18-mcp-integration.md": {
+      "headings": [
+        "## Chapter 18 — MCP Integration: The Model Context Protocol",
+        "### 18.1 What Is the Model Context Protocol?",
+        "### 18.2 MCP Architecture",
+        "### 18.3 Lemura's MCP Support",
+        "### 18.4 Connecting to an MCP Server",
+        "### 18.5 Using MCP Tools in a Session",
+        "### 18.6 Building Your Own MCP Server",
+        "### 18.7 MCP in Production",
+        "## Key Takeaways"
+      ]
+    },
+    "28-ch19-skills-system.md": {
+      "headings": [
+        "## Chapter 19 — Skills: Reusable Agent Capabilities",
+        "### 19.1 What Is a Skill?",
+        "### 19.2 Defining a Skill",
+        "### 19.3 The SkillInjector",
+        "### 19.4 Token Budget Enforcement",
+        "### 19.5 Skill Design Patterns",
+        "### 19.6 Building a Skill Library",
+        "### 19.7 Dynamic Skill Selection",
+        "## Key Takeaways"
+      ]
+    },
+    "29-part-4-intro.md": {
+      "headings": [
+        "# Part IV — Memory and State",
+        "## What the Agent Remembers",
+        "### What This Part Covers",
+        "### The Memory Hierarchy",
+        "### Why Memory Is the Hardest Problem in Agents"
+      ]
+    },
+    "30-ch20-memory-architecture.md": {
+      "headings": [
+        "## Chapter 20 — Memory Architecture for Long-Running Agents",
+        "### 20.1 Why Single-Context Memory Fails for Long Tasks",
+        "### 20.2 The Three-Tier Memory Architecture",
+        "### 20.3 What Goes in Each Tier",
+        "### 20.4 External Memory Integration",
+        "### 20.5 Memory Retrieval Strategies",
+        "### 20.6 Memory Consistency",
+        "### 20.7 Implementing a Memory Tool in Lemura",
+        "## Key Takeaways"
+      ]
+    },
+    "31-ch21-multi-turn-context.md": {
+      "headings": [
+        "## Chapter 21 — Multi-Turn Context Management",
+        "### 21.1 The Multi-Turn Challenge",
+        "### 21.2 Designing for Multi-Turn from the Start",
+        "### 21.3 Context Window Budget Allocation",
+        "### 21.4 Injecting Prior Session Context",
+        "### 21.5 Multi-Session Agents",
+        "### 21.6 Testing Multi-Turn Behavior",
+        "## Key Takeaways"
+      ]
+    },
+    "32-ch22-compression-strategies.md": {
+      "headings": [
+        "## Chapter 22 — Compression Strategies in Depth",
+        "### 22.1 A Complete Taxonomy of Compression Approaches",
+        "### 22.2 Truncation: When You Have No Choice",
+        "### 22.3 Rolling History Summarization",
+        "### 22.4 The Sandwich Strategy Fully Explained",
+        "### 22.5 Summary Injection: Continuity Without Redundancy",
+        "### 22.6 Composition Patterns",
+        "### 22.7 Measuring Compression Effectiveness",
+        "## Key Takeaways"
+      ]
+    },
+    "33-ch23-state-persistence.md": {
+      "headings": [
+        "## Chapter 23 — State Persistence and Recovery",
+        "### 23.1 Why Statelessness Fails for Agents",
+        "### 23.2 What State Must Be Persisted",
+        "### 23.3 Checkpoint Architecture",
+        "### 23.4 Resumption Strategies",
+        "### 23.5 Idempotency in Tool Calls",
+        "### 23.6 Implementing Persistence with Lemura",
+        "### 23.7 Distributed Agents and Consistency",
+        "## Key Takeaways"
+      ]
+    },
+    "34-part-5-intro.md": {
+      "headings": [
+        "# Part V — Advanced Patterns",
+        "## The Patterns That Separate Good Agents from Great Ones",
+        "### What This Part Covers",
+        "### Who This Part Is For",
+        "### A Note on Trade-offs"
+      ]
+    },
+    "35-ch24-multi-agent.md": {
+      "headings": [
+        "## Chapter 24 — Multi-Agent Systems",
+        "### 24.1 Why Multiple Agents?",
+        "### 24.2 Multi-Agent Topologies",
+        "### 24.3 Agent Communication Patterns",
+        "### 24.4 Implementing Agent-to-Agent Calls in Lemura",
+        "### 24.5 State and Context in Multi-Agent Systems",
+        "### 24.6 Multi-Agent Anti-Patterns",
+        "### 24.7 When NOT to Use Multiple Agents",
+        "## Key Takeaways"
+      ]
+    },
+    "36-ch25-orchestration.md": {
+      "headings": [
+        "## Chapter 25 — Agent Orchestration Patterns",
+        "### 25.1 What Is Orchestration?",
+        "### 25.2 The Router Pattern",
+        "### 25.3 The Supervisor Pattern",
+        "### 25.4 The Scatter-Gather Pattern",
+        "### 25.5 The Critic Pattern",
+        "### 25.6 Dynamic Orchestration",
+        "### 25.7 Orchestration Observability",
+        "## Key Takeaways"
+      ]
+    },
+    "37-ch26-error-recovery.md": {
+      "headings": [
+        "## Chapter 26 — Error Recovery and Resilience",
+        "### 26.1 Error Classification for Agents",
+        "### 26.2 Retry Strategies",
+        "### 26.3 Fallback Strategies",
+        "### 26.4 Self-Healing Agents",
+        "### 26.5 Failure Cascades and How to Prevent Them",
+        "### 26.6 Recovery from Specific Failure Modes",
+        "### 26.7 Resilience Testing",
+        "## Key Takeaways"
+      ]
+    },
+    "38-ch27-human-in-the-loop.md": {
+      "headings": [
+        "## Chapter 27 — Human-in-the-Loop",
+        "### 27.1 Why Human-in-the-Loop?",
+        "### 27.2 Patterns for Human Involvement",
+        "### 27.3 Implementing Pause and Await",
+        "### 27.4 Designing Effective Approval Interfaces",
+        "### 27.5 Calibrating Autonomy to Risk",
+        "### 27.6 The Clarification Request Pattern",
+        "### 27.7 Building Trust in Autonomous Systems",
+        "## Key Takeaways"
+      ]
+    },
+    "39-ch28-cost-optimization.md": {
+      "headings": [
+        "## Chapter 28 — Cost Optimization",
+        "### 28.1 The Token Economy",
+        "### 28.2 Profiling Token Usage",
+        "### 28.3 System Prompt Optimization",
+        "### 28.4 Context Compression as Cost Control",
+        "### 28.5 Model Routing for Cost",
+        "### 28.6 Caching Strategies",
+        "### 28.7 Budget Controls and Hard Limits",
+        "### 28.8 Cost Benchmarking and Reporting",
+        "## Key Takeaways"
+      ]
+    },
+    "40-ch29-security-safety.md": {
+      "headings": [
+        "## Chapter 29 — Security and Safety",
+        "### 29.1 The Threat Model for Autonomous Agents",
+        "### 29.2 Prompt Injection",
+        "### 29.3 Tool Permission Design",
+        "### 29.4 Secrets and Credentials",
+        "### 29.5 Output Validation",
+        "### 29.6 Safety Guardrails",
+        "### 29.7 Regulatory and Compliance Considerations",
+        "## Key Takeaways"
+      ]
+    },
+    "41-ch30-observability.md": {
+      "headings": [
+        "## Chapter 30 — Observability and Debugging",
+        "### 30.1 Why Agent Observability Is Hard",
+        "### 30.2 The Three Pillars of Agent Observability",
+        "### 30.3 What to Log",
+        "### 30.4 Distributed Tracing for Multi-Agent Systems",
+        "### 30.5 Key Metrics to Track",
+        "### 30.6 Debugging Agent Failures",
+        "### 30.7 Session Replay and Post-Mortems",
+        "### 30.8 Alerting and SLOs for Agents",
+        "## Key Takeaways"
+      ]
+    },
+    "42-part-6-intro.md": {
+      "headings": [
+        "# Part VI — Production Engineering",
+        "## From Working to Production-Grade",
+        "### What This Part Covers",
+        "### The Production Readiness Checklist",
+        "### The Shift in Mindset"
+      ]
+    },
+    "43-ch31-testing.md": {
+      "headings": [
+        "## Chapter 31 — Testing Autonomous Agents",
+        "### 31.1 Why Testing Agents Is Different",
+        "### 31.2 The Agent Testing Pyramid",
+        "### 31.3 Testing Tools",
+        "### 31.4 Integration Testing the ReAct Loop",
+        "### 31.5 End-to-End Agent Tests",
+        "### 31.6 Evaluation Frameworks",
+        "### 31.7 Chaos and Resilience Testing",
+        "### 31.8 CI/CD for Agent Systems",
+        "## Key Takeaways"
+      ]
+    },
+    "44-ch32-deployment.md": {
+      "headings": [
+        "## Chapter 32 — Deployment Strategies",
+        "### 32.1 Deployment Topologies",
+        "### 32.2 Execution Environments",
+        "### 32.3 Long-Running Agent Challenges in Serverless",
+        "### 32.4 Queue-Based Agent Systems",
+        "### 32.5 Safe Rollout Strategies",
+        "### 32.6 Configuration Management",
+        "### 32.7 Infrastructure as Code for Agent Systems",
+        "## Key Takeaways"
+      ]
+    },
+    "45-ch33-scaling.md": {
+      "headings": [
+        "## Chapter 33 — Scaling Agent Systems",
+        "### 33.1 How Agent Scaling Differs from API Scaling",
+        "### 33.2 Horizontal Scaling Patterns",
+        "### 33.3 Rate Limit Management",
+        "### 33.4 Database and Storage at Scale",
+        "### 33.5 Concurrency Patterns",
+        "### 33.6 Load Testing Agent Systems",
+        "### 33.7 Cost Scaling: Budget at Scale",
+        "## Key Takeaways"
+      ]
+    },
+    "46-ch34-monitoring.md": {
+      "headings": [
+        "## Chapter 34 — Monitoring in Production",
+        "### 34.1 What Production Monitoring Must Cover",
+        "### 34.2 The Agent Monitoring Stack",
+        "### 34.3 Key Dashboards",
+        "### 34.4 Alerting Strategy",
+        "### 34.5 Service Level Objectives for Agents",
+        "### 34.6 Production Runbooks",
+        "## Key Takeaways"
+      ]
+    },
+    "47-ch35-evaluation.md": {
+      "headings": [
+        "## Chapter 35 — Continuous Improvement and Evaluation",
+        "### 35.1 The Agent Improvement Lifecycle",
+        "### 35.2 Collecting Improvement Signal",
+        "### 35.3 Evaluation Datasets",
+        "### 35.4 Evaluation Metrics by Task Type",
+        "### 35.5 LLM-as-Judge Evaluation",
+        "### 35.6 A/B Testing Agent Changes",
+        "### 35.7 Versioning Agent Behavior",
+        "## Key Takeaways"
+      ]
+    },
+    "48-ch36-reliability.md": {
+      "headings": [
+        "## Chapter 36 — Reliability Engineering for Agents",
+        "### 36.1 Applying SRE Principles to Agents",
+        "### 36.2 Defining SLOs for Agent Systems",
+        "### 36.3 Incident Response for Agent Failures",
+        "### 36.4 Graceful Degradation",
+        "### 36.5 Dependency Reliability",
+        "### 36.6 Building a Reliability Culture",
+        "## Key Takeaways"
+      ]
+    },
+    "49-part-7-intro.md": {
+      "headings": [
+        "# Part VII — Real-World Applications",
+        "## From Theory to the Real World",
+        "### What This Part Covers",
+        "### How to Read This Part",
+        "### Why These Three?"
+      ]
+    },
+    "50-ch37-case-coding-agent.md": {
+      "headings": [
+        "## Chapter 37 — Case Study: The Coding Agent",
+        "### 37.1 The Problem: What the Coding Agent Must Do",
+        "### 37.2 The Challenges",
+        "### 37.3 Tool Design for a Coding Agent",
+        "### 37.4 Session Configuration",
+        "### 37.5 The Implementation",
+        "### 37.6 Lessons Learned",
+        "## Key Takeaways"
+      ]
+    },
+    "51-ch38-case-research-agent.md": {
+      "headings": [
+        "## Chapter 38 — Case Study: The Research Agent",
+        "### 38.1 The Problem: Deep Research at Scale",
+        "### 38.2 The Challenges",
+        "### 38.3 Tool Design for a Research Agent",
+        "### 38.4 The Research Plan Pattern",
+        "### 38.5 Managing Information Overload",
+        "### 38.6 Handling Uncertainty Correctly",
+        "### 38.7 Lessons Learned",
+        "## Key Takeaways"
+      ]
+    },
+    "52-ch39-case-enterprise.md": {
+      "headings": [
+        "## Chapter 39 — Case Study: The Enterprise Workflow Agent",
+        "### 39.1 The Problem: Multi-System Business Automation",
+        "### 39.2 The Challenges",
+        "### 39.3 Tool Design for Enterprise",
+        "### 39.4 Session Configuration for High Reliability",
+        "### 39.5 The Audit Trail System",
+        "### 39.6 Multi-Step Workflow Plans",
+        "### 39.7 Lessons Learned",
+        "## Key Takeaways"
+      ]
+    },
+    "53-ch40-future.md": {
+      "headings": [
+        "## Chapter 40 — What Comes Next",
+        "### 40.1 What We Got Right (And What We Missed)",
+        "### 40.2 Near-Term Trends (2026–2027)",
+        "### 40.3 Emerging Architectures",
+        "### 40.4 What Remains Hard (And May Stay Hard)",
+        "### 40.5 The Engineering Opportunity",
+        "### 40.6 How to Stay Current Without Getting Distracted",
+        "### 40.7 A Final Word: Build Things That Matter",
+        "## Key Takeaways"
+      ]
+    },
+    "54-part-back-matter.md": {
+      "headings": [
+        "# Back Matter",
+        "## Reference Material",
+        "### How to Use the Appendices"
+      ]
+    },
+    "55-appendix-a-api-reference.md": {
+      "headings": [
+        "## Appendix A — Lemura API Reference",
+        "### SessionManager",
+        "### SessionConfig",
+        "### IProviderAdapter",
+        "### OpenAICompatibleAdapter",
+        "### ContextManager",
+        "### IContextStrategy",
+        "### SandwichCompressionStrategy",
+        "### HistoryCompressionStrategy",
+        "### SummaryInjectionStrategy",
+        "### GoalInjector",
+        "### ContinuationPlanner",
+        "### PlanStep Interface",
+        "### ToolResponseProcessor",
+        "### MCPClient",
+        "### MCPClientRegistry"
+      ]
+    },
+    "56-appendix-b-config-reference.md": {
+      "headings": [
+        "## Appendix B — SessionConfig Key Reference",
+        "### Model and Provider",
+        "### Context and Compression",
+        "### Goal and Plan",
+        "### Tools",
+        "### Skills",
+        "### Execution Control",
+        "### Callbacks and Hooks"
+      ]
+    },
+    "57-appendix-c-glossary.md": {
+      "headings": [
+        "## Appendix C — Glossary"
+      ]
+    },
+    "58-appendix-d-further-reading.md": {
+      "headings": [
+        "## Appendix D — Further Reading and Resources",
+        "### Foundational Papers",
+        "### Agent Architecture",
+        "### Production and Reliability",
+        "### Security",
+        "### Evaluation",
+        "### The Lemura Repository"
+      ]
+    },
+    "59-bibliography.md": {
+      "headings": [
+        "## Bibliography",
+        "### Citation Guidelines for Writers"
+      ]
+    },
+    "60-about-author.md": {
+      "headings": [
+        "## About the Author"
+      ]
+    }
+  }
+}

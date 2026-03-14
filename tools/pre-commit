@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Git pre-commit hook — book quality gate
+#
+# Install:
+#   cp tools/pre-commit .git/hooks/pre-commit
+#   chmod +x .git/hooks/pre-commit
+#
+# What it checks:
+#   - TOC integrity (no broken links, no orphaned files)
+#   - Frozen structure (headings_lock.json must match current H1/H2/H3)
+#   - All guideline rules (rules.md + format.md)
+#
+# Exit 1 blocks the commit. Warnings are printed but do not block.
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$(git rev-parse --show-toplevel)"
+
+echo "── Book quality check ────────────────────────────────────────────────────"
+
+# Only run if content/ or guidelines/ files are staged
+STAGED=$(git diff --cached --name-only | grep -E '^(content|guidelines)/' || true)
+
+if [ -z "$STAGED" ]; then
+    echo "  No content or guidelines files staged — skipping book checks."
+    exit 0
+fi
+
+# Warn if the TOC or headings_lock.json is staged (structural change)
+if git diff --cached --name-only | grep -q "content/07-toc.md"; then
+    echo ""
+    echo "  ⚠  WARNING: content/07-toc.md is staged."
+    echo "     The TOC is frozen (rule 6). Only commit TOC changes if intentional"
+    echo "     and accompanied by an updated headings_lock.json."
+    echo ""
+fi
+
+if git diff --cached --name-only | grep -q "tools/headings_lock.json"; then
+    echo ""
+    echo "  ⚠  NOTE: tools/headings_lock.json is staged (structural update)."
+    echo "     Ensure this reflects a deliberate, reviewed change."
+    echo ""
+fi
+
+# Run the checker
+python "$ROOT/tools/check.py"
+EXIT=$?
+
+echo "──────────────────────────────────────────────────────────────────────────"
+
+if [ $EXIT -ne 0 ]; then
+    echo ""
+    echo "  Commit blocked — fix the errors above before committing."
+    echo "  To bypass (not recommended): git commit --no-verify"
+    exit 1
+fi
+
+exit 0
