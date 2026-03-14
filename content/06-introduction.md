@@ -8,19 +8,13 @@ status: draft
 
 ### The Promise That Got Everyone Excited
 
-In 2023, something changed. Language models crossed a threshold — not in raw capability, but in composability. You could give a model a list of tools, describe a task in natural language, and watch it reason through a multi-step solution autonomously. The demos were striking: an agent that searched the web, synthesized findings, and wrote a report. An agent that read a codebase, found a bug, and fixed it. An agent that coordinated across multiple APIs to complete a business workflow that would have taken a human an hour.
-
-Engineers who saw those demos had the same reaction: this changes everything. If software can reason and act autonomously, then the ceiling on what a single engineer can automate rises dramatically. Tasks that were too variable or too context-dependent for traditional automation became tractable. The gap between "a human has to do this" and "a computer can do this" shrank in ways nobody had anticipated.
-
-That excitement was — and remains — justified. The underlying capability is real.
+In 2023, language models crossed a threshold in composability. Give a model a list of tools and a natural-language task, and it reasons through a multi-step solution autonomously. The demos were striking: an agent that searched the web and wrote a report; an agent that read a codebase, found a bug, and fixed it. That excitement was — and remains — justified. The underlying capability is real.
 
 ### The Gap Between the Demo and the Product
 
-What the demos did not show was what happened when the agent ran for 200 turns instead of 8. What happened when the context window filled with verbose tool responses and the agent lost track of its original goal. What happened when a downstream API returned a subtly malformed response that the agent interpreted as success. What happened when the agent's per-session cost was forty times the estimate because nobody had set a hard token limit.
+A demo runs for 8 turns on a clean task on a laptop. Production runs for 200 turns on messy tasks under real load. The failure modes — context overflow, cost spirals, goal drift, silent failures, hallucinated tool calls, infinite loops, partial state corruption — are not hypothetical risks. They are the normal conditions of naive agent implementations running under real load.
 
-The gap between the demo and the product is everything that can go wrong at 3am: context overflow, cost spirals, goal drift, silent failures, hallucinated tool calls, infinite loops, and partial state corruption. These are not hypothetical risks. They are the normal failure modes of naive agent implementations running under real load.
-
-This book is about closing that gap. Not by making agents simpler — the complexity is inherent — but by making it manageable with the right architecture, the right observability, and the right engineering discipline.
+This book is about closing that gap: not by simplifying agents, but by making the complexity manageable through the right architecture, observability, and engineering discipline.
 
 ### What This Book Covers
 

@@ -445,10 +445,8 @@ On the organizational side: define clear ownership for the agent's behavior. Som
 
 The most trusted autonomous agents in production are not the ones with the highest autonomy level. They are the ones with the most legible behavior — systems where, after any execution, you can explain exactly what happened, why, and what would need to change for it to happen differently. Design for legibility from the start, and autonomy will follow naturally as your evidence base grows and your risk models become more precise.
 
-Start every new deployment at Level 2 — approve all — for at least the first week in production. This builds your audit log, surfaces edge cases, and gives you the evidence needed to safely move to Level 3. You cannot skip this step and expect reliable progressive autonomy. The data generated during the fully supervised phase is the foundation on which all future autonomy decisions rest.
-
 > [!TIP]
-> Start every new agent deployment at Level 2 (approve all) for the first week in production. This builds your audit log, surfaces edge cases, and gives you the evidence needed to safely move to Level 3. Premature autonomy is the most common mistake in production agent deployments.
+> Start every new agent deployment at Level 2 (approve all) for the first week in production. This builds your audit log, surfaces edge cases, and gives you the evidence needed to safely move to Level 3. The data generated during this supervised phase is the foundation for all future autonomy decisions. Premature autonomy is the most common mistake in production agent deployments.
 
 > [!WARNING]
 > Never allow your timeout-on-approval policy to default to approved. A human who misses a notification should result in a denied action and a retry, not an autonomous execution. Defaulting to approval on timeout defeats the entire purpose of the oversight mechanism.

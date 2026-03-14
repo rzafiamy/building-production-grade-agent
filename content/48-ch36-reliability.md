@@ -45,19 +45,11 @@ Define your error budget as: `1 - (goal_completion_rate × (1 - technical_failur
 
 SLOs are commitments to users about service behavior. Define them as observable, measurable properties — not aspirations. "The agent will be helpful" is not an SLO. "The agent will complete the stated task with verified correctness in at least 88% of sessions" is an SLO.
 
-#### 36.2.1 The Challenge: Subjective Success Criteria
+The three SLOs every agent service needs — task completion rate, end-to-end latency, and cost per task — are defined with specific targets and measurement approaches in **Chapter 34 — Monitoring in Production** (sections 34.5.2–34.5.4). This section covers the SRE-specific framing: how to define "success" for agent tasks, and how error budgets work when success is non-deterministic.
 
-The hardest part of defining SLOs for agents is defining "success." Unlike an HTTP request, agent success requires judgment. The solution is to use proxy metrics that correlate with user-perceived quality and that can be measured automatically:
+#### 36.2.1 Defining "Completed" for Your Agent Type
 
-- For coding agents: test suite pass rate is an objective proxy for correctness
-- For research agents: report completeness (all required fields populated, minimum citation count) is a measurable proxy for quality
-- For workflow agents: all plan steps reaching `done` status is a measurable proxy for task completion
-
-Choose your proxy metrics carefully. A proxy that can be gamed — like counting the number of words in the output — is a poor SLO. A proxy that correlates with actual user satisfaction in your domain is a good one.
-
-#### 36.2.2 SLO: Task Completion Rate
-
-The most important SLO for most agent types. Define "completed" precisely for your use case, then measure it.
+The hardest part of SLOs for agents is defining what "success" means. Use proxy metrics that correlate with user-perceived quality and that can be measured automatically. Choose proxies that cannot be trivially gamed.
 
 | Agent Type | Completion Definition |
 |------------|----------------------|
@@ -68,21 +60,9 @@ The most important SLO for most agent types. Define "completed" precisely for yo
 
 <!-- Accurate as of 2026-03 — verify before next edition -->
 
-Target: Set initially at 5 percentage points below your measured baseline. Example: if your baseline measurement shows 87% task completion, set the SLO at 82%. The buffer absorbs normal variance while alerting on systematic degradation.
+Set your initial task completion SLO target at 5 percentage points below your measured baseline. If your baseline is 87% task completion, the SLO is 82%. This absorbs normal variance while alerting on systematic degradation. Apply the same principle to your latency and cost SLOs.
 
-#### 36.2.3 SLO: End-to-End Latency
-
-Measure from when the user submits a task to when the agent returns its final response. For interactive agents, the relevant percentiles are p50 (median user experience) and p95 (worst acceptable experience). For batch agents, p95 and p99 matter more.
-
-Latency SLOs for agents are usually in the range of 30–120 seconds for typical tasks, much longer than the millisecond-range latency SLOs for web APIs. Set targets based on what your users actually find acceptable — not based on what you could achieve with aggressive optimization.
-
-#### 36.2.4 SLO: Cost per Successful Task
-
-Cost is a reliability property for agent systems in a way that it is not for traditional services. A session that costs $5 when the expected cost is $0.15 is a reliability failure — it indicates a runaway session, a cost-inefficient implementation, or a task that is qualitatively different from what the system was designed for.
-
-Set a cost SLO as a percentile cap: "95% of sessions should cost less than $X." The 95th percentile allows for legitimate high-cost sessions (complex tasks) while alerting on systematic cost overruns. Track cost per successful task separately from cost per session — if the task completion rate drops while cost per session stays constant, cost per successful task spikes.
-
-#### 36.2.5 Error Budgets and Their Meaning
+#### 36.2.2 Error Budgets and Their Meaning
 
 Your error budget is the amount of reliability you can afford to "spend" over a measurement period (typically 30 days) before you are required to stop shipping new changes and focus on reliability work instead.
 
@@ -344,7 +324,8 @@ If mitigation does not restore completion rate within 30 minutes, page the on-ca
 ## Key Takeaways
 
 - Apply standard SRE practices to agents with one critical adaptation: add quality (goal completion rate) as a third reliability dimension alongside availability and latency. Technically-available agents that produce wrong output are reliability failures.
-- Define three SLOs: task completion rate, end-to-end latency by percentile, and cost per successful task. Set initial targets 5 percentage points below your measured baseline to account for normal variance.
+- Define three SLOs (fully specified in **Chapter 34**): task completion rate, end-to-end latency by percentile, and cost per successful task. Set initial targets 5 percentage points below your measured baseline.
+- Define "completed" with a precise, ungameable proxy metric for your agent type before setting the SLO number — vague success criteria make the SLO meaningless.
 - The combined error budget formula is `1 - (goal_completion_rate × (1 - technical_failure_rate))`. Separate technical and quality failures in your budget accounting.
 - Incident response is sequential: mitigate first, investigate second. Never attempt root cause analysis before harm is stopped.
 - The five most common root causes of agent quality incidents are model provider updates, tool regressions, prompt regressions, context overflow with real-world data, and cost-triggered throttling. Check them in this order.

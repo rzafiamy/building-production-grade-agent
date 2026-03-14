@@ -31,7 +31,7 @@ This is the simplest question, but it is not trivial. "Running" means the sessio
 
 Measure this with: session start rate, session completion rate, unhandled exception rate, and LLM API error rate. If sessions are crashing before producing any output, nothing else matters. These metrics are your first line of defense.
 
-You also want a synthetic heartbeat: a lightweight task that runs every five minutes, makes one tool call, and completes. If the heartbeat fails twice consecutively, you fire a P1 alert before any real user encounters the problem. Design the heartbeat task to exercise the critical path — it should call the same LLM provider and at least one key tool that your production sessions use.
+You also want a synthetic heartbeat: a lightweight task that runs every five minutes, makes one tool call, and completes. If the heartbeat fails twice consecutively, you fire a SEV-1 alert before any real user encounters the problem. Design the heartbeat task to exercise the critical path — it should call the same LLM provider and at least one key tool that your production sessions use.
 
 #### 34.1.2 Is the Agent Completing Tasks?
 
@@ -57,11 +57,11 @@ Cost monitoring also serves as an early warning system for bugs and regressions.
 
 ### 34.2 The Agent Monitoring Stack
 
-A production agent monitoring stack has four layers: metrics collection, log aggregation, trace storage, and a visualization layer. Each layer serves a different purpose. Together they give you the full picture of what is happening in production.
+A production agent monitoring stack has four layers: metrics collection, log aggregation, trace storage, and a visualization layer. **Chapter 30 — Observability and Debugging** covers the foundational instrumentation — how to wire the `onTrace` callback, what events to log, and how to set up distributed tracing for multi-agent systems. This section focuses on the production-specific configuration decisions for each layer.
 
 #### 34.2.1 Metrics Collection
 
-Metrics are numeric measurements collected over time: counters, rates, histograms, and gauges. For agents, the key metrics are:
+The key Prometheus metric names for a Lemura agent service:
 
 - `agent_session_started_total` — counter
 - `agent_session_completed_total` — counter, labeled by `status` (success/failure/timeout)
@@ -75,27 +75,15 @@ Metrics are numeric measurements collected over time: counters, rates, histogram
 - `agent_tool_call_duration_seconds` — histogram, labeled by `tool_name`
 - `agent_compression_triggered_total` — counter, labeled by `strategy`
 
-Collect these via the `onTrace` callback in Lemura. Every `TraceEvent` carries enough information to populate most of these metrics. The TypeScript example at the end of this chapter shows you exactly how to wire this.
-
-Design your metric labels carefully. Labels that have high cardinality — like `sessionId` — will explode your metrics storage. Keep label values to bounded sets: `tool_name` is fine because you have a fixed set of tools; `userId` is dangerous unless you have a small, bounded user set.
+Collect these via the `onTrace` callback — the full TypeScript implementation is at the end of this chapter. One production-critical rule on labels: never use high-cardinality values like `sessionId` as label keys. They will explode your metrics storage. Keep label values to bounded sets: `tool_name` is safe; `userId` is not unless you have a small, fixed user set.
 
 #### 34.2.2 Log Aggregation
 
-Logs are the narrative record of what happened in a session. Every session should emit structured JSON logs that include: `sessionId`, `timestamp`, `event_type`, `tool_name` (where applicable), `token_count`, `error` (where applicable), and `model`.
-
-Structured logs are queryable. When an alert fires for a specific session, you want to pull the full log for that session and read a clear sequence of events within 30 seconds. Unstructured logs — plain text — do not allow this.
-
-Do not log raw LLM output to your default log stream. It will flood your log storage and almost certainly contains sensitive user data. Log a summary: the number of tokens, the tool calls made, whether compression was applied, and the completion status. Log the full output only to a separate, access-controlled stream used for quality review sampling.
-
-Attach a `sessionId` to every log line in a session. This is the key you will use to correlate logs across distributed services when debugging a specific incident.
+Every session should emit structured JSON logs. In production, do not log raw LLM output to your default log stream — it floods storage and almost certainly contains sensitive user data. Log a summary: token counts, tool calls made, compression status, and completion outcome. Route full output only to a separate, access-controlled stream used for quality review sampling. Attach `sessionId` to every log line — it is the correlation key when debugging a specific incident across distributed services.
 
 #### 34.2.3 Trace Storage
 
-Traces give you the full hierarchical picture of a session with timing at every level. A trace for an agent session shows the session as the root span, each turn as a child span, each tool call as a grandchild span, and LLM API calls as leaves.
-
-Traces answer questions that metrics and logs cannot: "Why did this specific session take 65 seconds? Was it the third tool call or the fifth LLM call?" Traces require more storage than metrics but are essential for performance debugging and for understanding the behavior of individual problematic sessions.
-
-Sample your traces intelligently in production. You do not need to store traces for every session — that is cost-prohibitive at scale. Store 100% of traces for sessions that fail, 100% of traces for sessions that exceed your P99 latency threshold, and 5-10% of traces from successful sessions as a baseline for comparison. This trace sampling strategy captures all the interesting cases without bankrupting your storage budget.
+Sample traces intelligently in production — storing every trace is cost-prohibitive at scale. The recommended strategy: store 100% of traces for sessions that fail, 100% of traces for sessions that exceed your P99 latency threshold, and 5–10% of successful sessions as a baseline. This captures all the interesting cases without unbounded storage growth.
 
 #### 34.2.4 Recommended Tooling
 
@@ -195,27 +183,27 @@ The distinction matters because conflating these two categories is how you build
 
 #### 34.4.2 Alert Severity Levels
 
-Use three severity levels and be consistent about their definitions. The definitions need to be written down and agreed on by the whole team — not left implicit.
+Use three severity levels and be consistent about their definitions. The definitions need to be written down and agreed on by the whole team — not left implicit. These align with the SEV-1/SEV-2/SEV-3 incident severity levels defined in **Chapter 36 — Reliability Engineering for Agents**.
 
-**P1 — Critical:** The agent is effectively unavailable for a meaningful portion of users. Requires immediate response, any time of day or night. Examples: session completion rate below 50%, LLM provider fully unreachable, unhandled exceptions affecting all sessions.
+**SEV-1 — Critical:** The agent is effectively unavailable for a meaningful portion of users. Requires immediate response, any time of day or night. Examples: session completion rate below 50%, LLM provider fully unreachable, unhandled exceptions affecting all sessions.
 
-**P2 — High:** The agent is degraded but partially operational. Requires response within 30 minutes during business hours, 1 hour off-hours. Examples: completion rate between 50-90%, a high-traffic tool failing at elevated error rate, latency P99 exceeding 10 minutes.
+**SEV-2 — High:** The agent is degraded but partially operational. Requires response within 30 minutes during business hours, 1 hour off-hours. Examples: completion rate between 50-90%, a high-traffic tool failing at elevated error rate, latency P99 exceeding 10 minutes.
 
-**P3 — Warning:** An anomaly that needs investigation but is not immediately causing user harm. Requires acknowledgment and triage within 4 hours during business hours. Examples: cost per session exceeding 2× baseline, latency SLO softly breached, compression trigger rate anomalously high.
+**SEV-3 — Warning:** An anomaly that needs investigation but is not immediately causing user harm. Requires acknowledgment and triage within 4 hours during business hours. Examples: cost per session exceeding 2× baseline, latency SLO softly breached, compression trigger rate anomalously high.
 
-Never escalate a P3 condition to P1 because it feels urgent in the moment. The severity definitions must be stable or your on-call team cannot build reliable intuitions about what requires them to wake up.
+Never escalate a SEV-3 condition to SEV-1 because it feels urgent in the moment. The severity definitions must be stable or your on-call team cannot build reliable intuitions about what requires them to wake up.
 
 #### 34.4.3 Alert Routing and On-Call
 
-Route P1 alerts to your on-call rotation via pager — PagerDuty and OpsGenie are both mature options. Route P2 alerts to the on-call channel in your team's chat system and email. Route P3 alerts to a dedicated monitoring channel where they can be triaged during business hours without interrupting anyone.
+Route SEV-1 alerts to your on-call rotation via pager — PagerDuty and OpsGenie are both mature options. Route SEV-2 alerts to the on-call channel in your team's chat system and email. Route SEV-3 alerts to a dedicated monitoring channel where they can be triaged during business hours without interrupting anyone.
 
-Keep your on-call rotation to engineers who have enough context to act on the alerts they receive. An engineer who has never looked at the agent codebase cannot respond effectively to a 3am P1. Every engineer in the rotation must have read all P1 runbooks before their rotation starts. Make this a formal requirement, not a suggestion.
+Keep your on-call rotation to engineers who have enough context to act on the alerts they receive. An engineer who has never looked at the agent codebase cannot respond effectively to a 3am SEV-1. Every engineer in the rotation must have read all SEV-1 runbooks before their rotation starts. Make this a formal requirement, not a suggestion.
 
-Document your escalation path clearly. If the on-call engineer cannot resolve a P1 within 30 minutes, who do they call? If the LLM provider is down, what is the business decision authority for switching to a backup provider or suspending the service?
+Document your escalation path clearly. If the on-call engineer cannot resolve a SEV-1 within 30 minutes, who do they call? If the LLM provider is down, what is the business decision authority for switching to a backup provider or suspending the service?
 
 #### 34.4.4 Avoiding Alert Fatigue
 
-Alert fatigue is the state where engineers have been conditioned by too many low-quality alerts to treat all alerts as noise. It is one of the most dangerous states your on-call rotation can enter, because when a real P1 fires, it gets the same mental response as the twenty false-positive P2s that preceded it.
+Alert fatigue is the state where engineers have been conditioned by too many low-quality alerts to treat all alerts as noise. It is one of the most dangerous states your on-call rotation can enter, because when a real SEV-1 fires, it gets the same mental response as the twenty false-positive SEV-2s that preceded it.
 
 Prevent alert fatigue by:
 - Requiring that every new alert has a named owner who commits to responding to it
@@ -287,7 +275,7 @@ Set your baseline from the first two weeks of production data. The initial basel
 
 A runbook is a step-by-step guide for responding to a specific alert. A good runbook has exactly four sections: detection signal (what triggered this alert), triage steps (determine how bad the situation is), mitigation (stop the bleeding immediately), and follow-up (root cause analysis after the incident is resolved).
 
-Write runbooks before you need them. The engineer woken up at 3am to respond to a P1 alert should not need to think — they should execute a known procedure. Every P1 and P2 alert must have a corresponding runbook that lives in your team's documentation system.
+Write runbooks before you need them. The engineer woken up at 3am to respond to a SEV-1 alert should not need to think — they should execute a known procedure. Every SEV-1 and SEV-2 alert must have a corresponding runbook that lives in your team's documentation system.
 
 #### 34.6.1 Agent Loop Detected
 
@@ -598,5 +586,5 @@ export { diagnoseSession, DiagnosticReport };
 - Build four dashboards before launch: session health (is it working?), token economy (what is it costing?), error rates (what is failing and why?), and tool performance (which tool is the problem?).
 - Use rolling window averages for SLO measurement — point-in-time measurements generate false positives from natural variance in non-deterministic agent behavior.
 - Three SLOs for agents: task completion rate ≥95% over 7 days; P95 latency ≤120 seconds; cost per session ≤2× baseline P90.
-- Three alert severity levels: P1 = agent effectively down, P2 = completion rate SLO breached, P3 = cost or latency anomaly. Keep the definitions stable.
-- Every P1 and P2 alert needs a runbook in four parts: detection signal, triage steps, mitigation, follow-up. Write them before your first production incident.
+- Three alert severity levels: SEV-1 = agent effectively down, SEV-2 = completion rate SLO breached, SEV-3 = cost or latency anomaly. Keep the definitions stable and aligned with the incident severity framework in **Chapter 36 — Reliability Engineering for Agents**.
+- Every SEV-1 and SEV-2 alert needs a runbook in four parts: detection signal, triage steps, mitigation, follow-up. Write them before your first production incident.
